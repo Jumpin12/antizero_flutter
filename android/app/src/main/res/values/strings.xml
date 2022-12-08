@@ -1,0 +1,5 @@
+<resources>
+    <string name="facebook_app_id">1377386619399241</string>
+    <string name="fb_login_protocol_scheme">fb1377386619399241</string>
+    <string name="default_notification_channel_id">jumpin</string>
+</resources>

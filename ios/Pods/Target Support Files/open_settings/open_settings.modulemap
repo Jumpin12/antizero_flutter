@@ -1,0 +1,6 @@
+framework module open_settings {
+  umbrella header "open_settings-umbrella.h"
+
+  export *
+  module * { export * }
+}

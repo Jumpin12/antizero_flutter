@@ -1,0 +1,6 @@
+package `in`.antizero.jumpinflutter
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity: FlutterActivity() {
+}

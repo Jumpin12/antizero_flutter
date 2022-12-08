@@ -1,0 +1,1 @@
+enum kDynamicLinkType { People, Plan }

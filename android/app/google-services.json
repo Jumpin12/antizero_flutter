@@ -1,0 +1,166 @@
+{
+  "project_info": {
+    "project_number": "934725974491",
+    "project_id": "antizero-jumpin",
+    "storage_bucket": "antizero-jumpin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934725974491:android:de1ab40969cc4dba180ffe",
+        "android_client_info": {
+          "package_name": "in.antizero.Jumpin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "934725974491-089fl52vv45mnsbt090j0cp12fvnaobg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "cc42a0a173ea5a3438f864a7d8a7616651a1d218"
+          }
+        },
+        {
+          "client_id": "934725974491-2domsdnt39sr8d92slsfurekae25jngm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "1cb6e80e0b00434a13c5d49c6f7ed1d1112cc261"
+          }
+        },
+        {
+          "client_id": "934725974491-a3mtmevub5lj1ihvpc6gdd8j4jo6fp6h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "9170c4a22712b0aefac51f7bfb54825f11f1977b"
+          }
+        },
+        {
+          "client_id": "934725974491-a8v6jmhfpok4bj5h0a2npaligmdpj6rn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "3d1888702ce072410838b8e94f648eb4067d9e4b"
+          }
+        },
+        {
+          "client_id": "934725974491-ch68q7e33rd4fhgst2hihl1pkgd0fljd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "25514a9dd763b1742e448ca23afbef22574235b5"
+          }
+        },
+        {
+          "client_id": "934725974491-e06flak7tmbk094n2g5j0obfc9hu1q47.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "7f91eb0eed5b57e55ef4c7d66f9a4c43e128b637"
+          }
+        },
+        {
+          "client_id": "934725974491-ht51bfvofovm7mes0tnbtm9i1kq5s8iv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "6492e0f6bc1ffe6101b30422a46422ec618bb111"
+          }
+        },
+        {
+          "client_id": "934725974491-ik0cqlqnecb5c0jppdtmgh8ihdcmutq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "68fce8ad7e8b8ed3661fd94d7dccde452fa74549"
+          }
+        },
+        {
+          "client_id": "934725974491-lpctigth0vna6h59m3prl0hruul30b5f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "a672f7cac39e76f50930d0bcca2113f9af0595d8"
+          }
+        },
+        {
+          "client_id": "934725974491-r1kkrh6822h7tprela4b5intp04v2dqr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "8e1f1cc2692d799706be4d499bc59ee3acf52043"
+          }
+        },
+        {
+          "client_id": "934725974491-sed4dlgf6nf4vg1mduoe6oict0gjklv7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "d473214a848dbd1d6d704bf13c916dce8cbab0e2"
+          }
+        },
+        {
+          "client_id": "934725974491-tl13dcgveaclv79c6n709pqh3msca1aj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "6aa47292df82a2b398164280ceb1eea2368d6f3f"
+          }
+        },
+        {
+          "client_id": "934725974491-v1imtvvcjqslnti5a2sjij1u61rbhj5r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "edb922d285e1be894d1e38a802a2d0e7f80884f6"
+          }
+        },
+        {
+          "client_id": "934725974491-v70ug3mqe7aj801flabj3g5j8fallqfs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "142fbf1b1f808496a5c639f55ec72bdd7172b488"
+          }
+        },
+        {
+          "client_id": "934725974491-vii3t2fn2eqohm21nd1ioni3rbsrjdmr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.antizero.Jumpin",
+            "certificate_hash": "d5f2931d5465d64e3fc885dea19d71db860b759d"
+          }
+        },
+        {
+          "client_id": "934725974491-tgat02nutubeq41mqsuljmlkbn8qat69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANbNLzp-2AGO8MAX79OXfiHNGvZBCmZdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "934725974491-tgat02nutubeq41mqsuljmlkbn8qat69.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "934725974491-qeui2vbl2sjurkqubqnvopil056g08sd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "in.antizero.Jumpin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
