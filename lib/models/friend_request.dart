@@ -29,6 +29,7 @@ class FriendRequest {
   String senderName;
   String senderImg;
   String placeOfWork;
+  String placeOfEdu;
 
   FriendRequest(
       this.id,
@@ -43,7 +44,7 @@ class FriendRequest {
       // this.senderMsgCount,
       // this.requestedToMsgCount,
       this.requestedByName,
-      this.requestedByImg,this.requestedById,this.senderName,this.senderImg,this.placeOfWork);
+      this.requestedByImg,this.requestedById,this.senderName,this.senderImg,this.placeOfWork,this.placeOfEdu);
 
   FriendRequest.named({
     this.id,
@@ -62,7 +63,8 @@ class FriendRequest {
     this.requestedById,
     this.senderName,
     this.senderImg,
-    this.placeOfWork
+    this.placeOfWork,
+    this.placeOfEdu
   });
 
   FriendRequest copyWith({
@@ -82,7 +84,8 @@ class FriendRequest {
     String requestedById,
     String sendToName,
     String sendToImg,
-    String placeOfWork
+    String placeOfWork,
+    String placeOfEdu
   }) =>
       FriendRequest.named(
         id: id ?? this.id,
@@ -101,7 +104,8 @@ class FriendRequest {
         requestedById: requestedById ?? this.requestedById,
         senderName: sendToName ?? this.senderName,
         senderImg: sendToImg ?? this.senderImg,
-        placeOfWork: placeOfWork ?? this.placeOfWork
+        placeOfWork: placeOfWork ?? this.placeOfWork,
+        placeOfEdu: placeOfEdu ?? this.placeOfEdu
       );
 
   Map<String, dynamic> toJson() => _$FriendRequestToJson(this);

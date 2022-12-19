@@ -151,7 +151,8 @@ class App extends StatelessWidget {
             theme: ThemeData(
                 // visualDensity: VisualDensity.adaptivePlatformDensity,
                 fontFamily: "AirbnbCereal",
-                textTheme: TextTheme(
+                textTheme:
+                TextTheme(
                   headline1: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

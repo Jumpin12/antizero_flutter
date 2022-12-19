@@ -98,7 +98,7 @@ class _CustomDrawerHeaderState extends State<CustomDrawerHeader>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     AnimatedMode(
-                      values: ['General', 'Company / \n College'],
+                      values: ['General', 'Company/\nCollege'],
                       onToggleCallback: (value) async
                       {
                         setState(() {

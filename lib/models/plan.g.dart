@@ -36,7 +36,8 @@ Plan _$PlanFromJson(Map<String, dynamic> json) {
     json['search_pname'] as String,
     json['chat_activity'] = Map<dynamic, dynamic>.from(json['chat_activity']),
     json['companyName'] as String,
-    json['placeOfWork'] as String
+    json['placeOfWork'] as String,
+    json['placeOfEdu'] as String
   );
 }
 
@@ -67,5 +68,6 @@ Map<String, dynamic> _$PlanToJson(Plan instance) => <String, dynamic>{
       'search_pname': instance.searchPname,
       'chat_activity': instance.chatActivity,
       'companyName': instance.companyName,
-      'placeOfWork': instance.placeOfWork
+      'placeOfWork': instance.placeOfWork,
+      'placeOfEdu': instance.placeOfEdu
     };

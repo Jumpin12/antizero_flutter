@@ -38,9 +38,27 @@ class _ConnectionCardState extends State<ConnectionCard> {
     print('User ${user.id}');
     if(user!=null)
       {
-        String companyName = await getCompanyNameFromMode(context);
+        // String companyName = await getCompanyNameFromMode(context);
+        String companyName,collegeName;
+        List malList = getCompanyOrCollegeNameFromMode(context);
+        if(malList!=null && malList.length>0)
+        {
+          if(malList.first == 1)
+          {
+            companyName = malList.last;
+          }
+          else if(malList.first == 2)
+          {
+            collegeName = malList.last;
+          }
+          else
+          {
+            companyName = '';
+            collegeName = '';
+          }
+        }
         print('companyName $companyName ${user.placeOfWork}');
-        if(companyName.length>0)
+        if(companyName!= null && companyName.length>0)
           {
             if(companyName == user.placeOfWork)
             {
@@ -52,6 +70,18 @@ class _ConnectionCardState extends State<ConnectionCard> {
               user = null;
             }
           }
+        else if(collegeName!= null && collegeName.length>0)
+        {
+          if(collegeName == user.placeOfEdu)
+          {
+            userProvider.setConnections(user);
+          }
+          else
+          {
+            userProvider.setConnections(null);
+            user = null;
+          }
+        }
         else
           {
             userProvider.setConnections(user);

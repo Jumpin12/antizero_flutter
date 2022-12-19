@@ -451,10 +451,29 @@ class ChatService {
   Future<List<FriendRequest>> getPeopleById(BuildContext context,String uid) async {
     List<FriendRequest> peopleDocs = [];
     try {
-      String companyName = await getCompanyNameFromMode(context);
-      if(companyName.length>0)
+      // String companyName = await getCompanyNameFromMode(context);
+      String companyName,collegeName;
+      List malList = getCompanyOrCollegeNameFromMode(context);
+      if(malList!=null && malList.length>0)
       {
-        var snaps = await peopleRef.where('userIds', arrayContains: uid).where('companyName',isEqualTo: companyName).where('status', isEqualTo: 'Requested').limit(500).get();if (snaps.docs.length > 0) {
+        if(malList.first == 1)
+        {
+          companyName = malList.last;
+        }
+        else if(malList.first == 2)
+        {
+          collegeName = malList.last;
+        }
+        else
+        {
+          companyName = '';
+          collegeName = '';
+        }
+      }
+      if(companyName!= null && companyName.length>0)
+      {
+        var snaps = await peopleRef.where('userIds', arrayContains: uid)
+            .where('companyName',isEqualTo: companyName).where('status', isEqualTo: 'Requested').limit(500).get();if (snaps.docs.length > 0) {
           for (int i = 0; i < snaps.docs.length; i++) {
             FriendRequest people = FriendRequest.fromJson(snaps.docs[i].data());
             if (people != null) {
@@ -463,6 +482,30 @@ class ChatService {
           }
         }
         var snaps1 = await peopleRef.where('userIds', arrayContains: uid).where('companyName',isEqualTo: companyName).where('status', isEqualTo: 'Accepted').limit(500).get();if (snaps1.docs.length > 0) {
+          for (int i = 0; i < snaps1.docs.length; i++) {
+            FriendRequest people = FriendRequest.fromJson(snaps1.docs[i].data());
+            if (people != null) {
+              peopleDocs.add(people);
+            }
+          }
+          return peopleDocs;
+        } else {return null;}
+      }
+      else if(collegeName!= null && collegeName.length>0)
+      {
+        var snaps = await peopleRef.where('userIds', arrayContains: uid)
+            .where('collegeName',isEqualTo: collegeName).where('status', isEqualTo: 'Requested')
+            .limit(500).get();if (snaps.docs.length > 0) {
+          for (int i = 0; i < snaps.docs.length; i++) {
+            FriendRequest people = FriendRequest.fromJson(snaps.docs[i].data());
+            if (people != null) {
+              peopleDocs.add(people);
+            }
+          }
+        }
+        var snaps1 = await peopleRef.where('userIds', arrayContains: uid)
+            .where('collegeName',isEqualTo: collegeName).where('status', isEqualTo: 'Accepted')
+            .limit(500).get();if (snaps1.docs.length > 0) {
           for (int i = 0; i < snaps1.docs.length; i++) {
             FriendRequest people = FriendRequest.fromJson(snaps1.docs[i].data());
             if (people != null) {
@@ -552,8 +595,26 @@ class ChatService {
   ///Function to fetch User Chat Stream
   Stream<QuerySnapshot> fetchUserChatStream(BuildContext context,String userId)
   {
-    String companyName = getCompanyNameFromMode(context);
-    if(companyName.length>0)
+    // String companyName = getCompanyNameFromMode(context);
+    String companyName,collegeName;
+    List malList = getCompanyOrCollegeNameFromMode(context);
+    if(malList!=null && malList.length>0)
+    {
+      if(malList.first == 1)
+      {
+        companyName = malList.last;
+      }
+      else if(malList.first == 2)
+      {
+        collegeName = malList.last;
+      }
+      else
+      {
+        companyName = '';
+        collegeName = '';
+      }
+    }
+    if((companyName!=null) && (companyName.length>0))
       {
         print('fetchUserChatStream userId $userId');
         try {

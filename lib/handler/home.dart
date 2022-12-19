@@ -171,7 +171,25 @@ Future<bool> sendRequest(String id, BuildContext context) async {
   recentMsg.sender = '';
   recentMsg.time = DateTime.now();
   FriendRequest friendRequest;
-  if(getCompanyNameFromMode(context).length>0)
+  String companyName,collegeName;
+  List malList = getCompanyOrCollegeNameFromMode(context);
+  if(malList!=null && malList.length>0)
+  {
+    if(malList.first == 1)
+    {
+      companyName = malList.last;
+    }
+    else if(malList.first == 2)
+    {
+      collegeName = malList.last;
+    }
+    else
+    {
+      companyName = '';
+      collegeName = '';
+    }
+  }
+  if(companyName.length>0)
     friendRequest = FriendRequest(
         uid,
         currentUser.id,
@@ -182,7 +200,21 @@ Future<bool> sendRequest(String id, BuildContext context) async {
         recentMsg,
         DateTime.now(),
         0,currentUser.name,currentUser.photoList.last,
-        currentUser.id,currentUser.name,currentUser.photoList.last,currentUser.placeOfWork);
+        currentUser.id,currentUser.name,currentUser.photoList.last,currentUser.placeOfWork,
+        '');
+  else if(collegeName.length>0)
+    friendRequest = FriendRequest(
+        uid,
+        currentUser.id,
+        id,
+        DateTime.now(),
+        userIds,
+        FriendRequestStatus.Requested,
+        recentMsg,
+        DateTime.now(),
+        0,currentUser.name,currentUser.photoList.last,
+        currentUser.id,currentUser.name,currentUser.photoList.last,'',
+        currentUser.placeOfEdu);
   else
     friendRequest = FriendRequest(
         uid,
@@ -194,7 +226,7 @@ Future<bool> sendRequest(String id, BuildContext context) async {
         recentMsg,
         DateTime.now(),
         0,currentUser.name,currentUser.photoList.last,
-        currentUser.id,currentUser.name,currentUser.photoList.last,'');
+        currentUser.id,currentUser.name,currentUser.photoList.last,'','');
 
   analytics.logCustomEvent(eventName: 'jumpinRequestSent', params: {
     'requestedBy': currentUser.id,

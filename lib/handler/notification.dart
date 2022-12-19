@@ -247,10 +247,10 @@ showNotification(BuildContext context, UserProvider userProvider,
 
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      .createNotificationChannel(channel);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //     AndroidFlutterLocalNotificationsPlugin>()
+  //     .createNotificationChannel(channel);
 
   /// Update the iOS foreground notification presentation options to allow
   /// heads up notifications.

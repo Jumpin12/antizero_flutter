@@ -260,7 +260,9 @@ navigateToRoute(BuildContext context) async
   JumpInUser user = await userServ.getCurrentUser();
   if (user != null)
   {
-    if(user.deactivate == 1)
+    print(' user.id ${user.id}');
+     await userServ.updateDeactive(user.id, 1);
+     if((user.deactivate != null) && (user.deactivate == 1))
       {
         // showToast('User is deleted.Please create a new account!');
         Timer(Duration(seconds: 6), ()

@@ -34,7 +34,7 @@ class _AnimatedModeState extends State<AnimatedMode> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * 0.4,
+      width: size.width * 0.5,
       height: size.width * 0.13,
       margin: EdgeInsets.all(10),
       child: Stack(
@@ -50,7 +50,7 @@ class _AnimatedModeState extends State<AnimatedMode> {
               setState(() {});
             },
             child: Container(
-              width: size.width * 0.4,
+              width: size.width * 0.5,
               height: size.width * 0.13,
               decoration: ShapeDecoration(
                 color: widget.backgroundColor,

@@ -25,7 +25,8 @@ FriendRequest _$FriendRequestFromJson(Map<String, dynamic> json) {
     json['requestedById'] as String,
     json['senderName'] as String,
     json['senderImg'] as String,
-    json['placeOfWork'] as String
+    json['placeOfWork'] as String,
+    json['placeOfEdu'] as String
   );
 }
 
@@ -47,7 +48,8 @@ Map<String, dynamic> _$FriendRequestToJson(FriendRequest instance) =>
       'requestedById': instance.requestedById,
       'senderName': instance.senderName,
       'senderImg': instance.senderImg,
-      'placeOfWork': instance.placeOfWork
+      'placeOfWork': instance.placeOfWork,
+      'placeOfEdu': instance.placeOfEdu
     };
 
 K _$enumDecode<K, V>(

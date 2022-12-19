@@ -21,7 +21,7 @@ formatTime(DateTime fetchedDateTime) {
   }
 }
 
-String getCompanyNameFromMode(BuildContext context)
+List getCompanyOrCollegeNameFromMode(BuildContext context)
 {
   print('getCompanyNameFromMode');
   var userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -30,13 +30,23 @@ String getCompanyNameFromMode(BuildContext context)
   String companyName = '';
   if(currentUser.mode==0)
   {
-    print('companyName ${''}');
-    return companyName = '';
+    // 0 for no mode and ' ' is companyName
+    return [0,''];
   }
   else
   {
     print('companyName ${userProvider.currentUser.placeOfWork}');
-    return companyName = userProvider.currentUser.placeOfWork;
+    String companyName = userProvider.currentUser.placeOfWork;
+    String collegeName = userProvider.currentUser.placeOfEdu;
+    print('mode,name ${mode} , ${companyName}');
+    if(companyName !=null && companyName.length >0)
+      // 1 for company and ' ' is companyName
+      return [1,companyName];
+    else if(collegeName !=null && collegeName.length >0)
+      // 2 for college and ' ' is companyName
+      return [2,collegeName];
+    else
+      return [0,''];
   }
 }
 

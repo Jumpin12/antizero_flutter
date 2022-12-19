@@ -417,10 +417,19 @@ Future<bool> sendPlanMsg(String text, BuildContext context,
     }
 
     planProvider.currentPlan.chatActivity = chatActivity;
-    if(getCompanyNameFromMode(context).length>0)
-      planProvider.currentPlan.placeOfWork = userProvider.currentUser.placeOfWork;
+    List malList = getCompanyOrCollegeNameFromMode(context);
+    if(malList.length>0)
+      {
+        if(malList.first==1)
+          planProvider.currentPlan.placeOfWork = userProvider.currentUser.placeOfWork;
+        else if(malList.first==2)
+          planProvider.currentPlan.placeOfEdu = userProvider.currentUser.placeOfEdu;
+      }
     else
-      planProvider.currentPlan.placeOfWork = '';
+      {
+        planProvider.currentPlan.placeOfWork = '';
+        planProvider.currentPlan.placeOfEdu = '';
+      }
 
     bool success = await locator
         .get<PlanService>()

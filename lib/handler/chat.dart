@@ -60,10 +60,33 @@ Future<bool> sendPeopleMsg(String text, BuildContext context,JumpInUser chatWith
   userProvider.currentPeopleGroup.senderImg = chatWithUser.photoList.last;
   userProvider.currentPeopleGroup.unseenMsgCount = 0;
   // mode changes
-  if(getCompanyNameFromMode(context).length>0)
+  String companyName,collegeName;
+  List malList = getCompanyOrCollegeNameFromMode(context);
+  if(malList!=null && malList.length>0)
+  {
+    if(malList.first == 1)
+    {
+      companyName = malList.last;
+    }
+    else if(malList.first == 2)
+    {
+      collegeName = malList.last;
+    }
+    else
+    {
+      companyName = '';
+      collegeName = '';
+    }
+  }
+  if(companyName!= null && companyName.length>0)
     userProvider.currentPeopleGroup.placeOfWork = userProvider.currentUser.placeOfWork;
+  else if(collegeName!= null && collegeName.length>0)
+    userProvider.currentPeopleGroup.placeOfEdu = userProvider.currentUser.placeOfEdu;
   else
-    userProvider.currentPeopleGroup.placeOfWork = '';
+    {
+      userProvider.currentPeopleGroup.placeOfWork = '';
+      userProvider.currentPeopleGroup.placeOfEdu = '';
+    }
 
   if (userProvider.currentPeopleGroup.unseenMsgCount != null) {
         userProvider.currentPeopleGroup.unseenMsgCount = await locator

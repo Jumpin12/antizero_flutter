@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState()
   {
     setRoute();
-    askPermission();
+    // askPermission();
     super.initState();
     FirebaseAnalytics.instance.logScreenView(
       screenName: 'Splash Screen',
@@ -88,19 +88,19 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<bool> askPermission() async{
-    PermissionStatus status = await Permission.contacts.request();
-    if(status.isDenied == true || status.isLimited == true
-        || status.isPermanentlyDenied == true
-    || status.isRestricted == true)
-    {
-      showAlertDialog(context);
-    }
-    else
-    {
-      return true;
-    }
-  }
+  // Future<bool> askPermission() async{
+  //   PermissionStatus status = await Permission.contacts.request();
+  //   if(status.isDenied == true || status.isLimited == true
+  //       || status.isPermanentlyDenied == true
+  //   || status.isRestricted == true)
+  //   {
+  //     showAlertDialog(context);
+  //   }
+  //   else
+  //   {
+  //     return true;
+  //   }
+  // }
 
   showAlertDialog(BuildContext context) {
 

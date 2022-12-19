@@ -81,6 +81,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       _submit;
   JumpInUser _currentUser;
   bool updating = false;
+  bool deleting = false;
   bool expanded = false;
   Map<String, dynamic> selections = {};
   FlutterSoundRecorder _recordingSession;
@@ -929,7 +930,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 {
                   deleteAccount();
                 },
-                loading: updating,
+                loading: deleting,
               ),
             ],
           ),
@@ -1133,13 +1134,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
   {
     // await authProvider.signOut();
     // 1 - deactivate true // 0 - deactivate false
+    setState(() {
+      deleting = true;
+    });
     int deactivate = 1;
     await userServ.deactivateAccount(context,AuthService().currentAppUser.uid,deactivate);
     // delete existing user
     await userServ.deleteFirebaseUser();
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.currentUser.deactivate = deactivate;
-
+    setState(() {
+      deleting = false;
+    });
   }
 }
 

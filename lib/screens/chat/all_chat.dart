@@ -33,7 +33,8 @@ class _AllChatPageState extends State<AllChatPage>
   TabController _tabController;
   bool isSearch;
   TextEditingController searchController;
-  String companyName;
+  String companyName,collegeName;
+  List malList;
 
   @override
   void initState() {
@@ -42,7 +43,23 @@ class _AllChatPageState extends State<AllChatPage>
     WidgetsBinding.instance.addObserver(this);
     isSearch = false;
     searchController = TextEditingController();
-    companyName = getCompanyNameFromMode(context);
+    malList = getCompanyOrCollegeNameFromMode(context);
+    if(malList!=null && malList.length>0)
+      {
+        if(malList.first == 1)
+          {
+            companyName = malList.last;
+          }
+        else if(malList.first == 2)
+          {
+            collegeName = malList.last;
+          }
+        else
+          {
+            companyName = '';
+            collegeName = '';
+          }
+      }
     FirebaseAnalytics.instance.logScreenView(
       screenName: 'All Chats',
       screenClass: 'Chats',
@@ -171,6 +188,13 @@ class _AllChatPageState extends State<AllChatPage>
                   chatsList.add(FriendRequest.fromJson(element.data()));
                 }
             }
+            else if(collegeName.length>0)
+              {
+                if(FriendRequest.fromJson(element.data()).placeOfEdu == collegeName)
+                {
+                  chatsList.add(FriendRequest.fromJson(element.data()));
+                }
+              }
             else
               {
                 chatsList.add(FriendRequest.fromJson(element.data()));

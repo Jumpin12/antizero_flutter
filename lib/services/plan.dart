@@ -160,13 +160,35 @@ class PlanService {
       JumpInUser currentUser = await locator.get<UserService>().getCurrentUser();
       var snap;
       print('currentUser.placeOfWork ${currentUser.placeOfWork}');
-      if(currentUser.placeOfWork!=null)
+      if(currentUser.placeOfWork!=null || currentUser.placeOfEdu!=null)
         {
-          String companyName = await getCompanyNameFromMode(context);
+          //String companyName = await getCompanyNameFromMode(context);
+          String companyName,collegeName;
+          List malList = getCompanyOrCollegeNameFromMode(context);
+          if(malList!=null && malList.length>0)
+          {
+            if(malList.first == 1)
+            {
+              companyName = malList.last;
+            }
+            else if(malList.first == 2)
+            {
+              collegeName = malList.last;
+            }
+            else
+            {
+              companyName = '';
+              collegeName = '';
+            }
+          }
           if(companyName.length>0)
             snap = await planRef.where('companyName',isEqualTo: currentUser.placeOfWork)
               .orderBy('createdAt', descending: true)
               .limit(5).get();
+          else if(collegeName.length>0)
+            snap = await planRef.where('collegeName',isEqualTo: currentUser.placeOfEdu)
+                .orderBy('createdAt', descending: true)
+                .limit(5).get();
           else
             snap = await planRef.orderBy('createdAt', descending: true)
                 .limit(5).get();
@@ -200,9 +222,27 @@ class PlanService {
     try {
       JumpInUser currentUser = await locator.get<UserService>().getCurrentUser();
       var snap;
-      if(currentUser.placeOfWork!=null)
+      if(currentUser.placeOfWork!=null || currentUser.placeOfEdu!=null)
         {
-          String companyName = await getCompanyNameFromMode(context);
+          // String companyName = await getCompanyNameFromMode(context);
+          String companyName,collegeName;
+          List malList = getCompanyOrCollegeNameFromMode(context);
+          if(malList!=null && malList.length>0)
+          {
+            if(malList.first == 1)
+            {
+              companyName = malList.last;
+            }
+            else if(malList.first == 2)
+            {
+              collegeName = malList.last;
+            }
+            else
+            {
+              companyName = '';
+              collegeName = '';
+            }
+          }
           if(companyName.length>0)
             snap = await planRef
               .where('companyName',isEqualTo: currentUser.placeOfWork)
@@ -210,6 +250,13 @@ class PlanService {
               .startAfter([date])
               .limit(limit ?? 500)
               .get();
+          else if(collegeName.length>0)
+            snap = await planRef
+                .where('collegeName',isEqualTo: currentUser.placeOfEdu)
+                .orderBy('createdAt', descending: true)
+                .startAfter([date])
+                .limit(limit ?? 500)
+                .get();
           else
             snap = await planRef
                 .orderBy('createdAt', descending: true)
@@ -433,9 +480,27 @@ class PlanService {
     print('userProvider.currentUser.id ${uid}');
     List<Plan> acceptedPlans = [];
     try {
-      String companyName = await getCompanyNameFromMode(context);
+      // String companyName = await getCompanyNameFromMode(context);
+      String companyName,collegeName;
+      List malList = getCompanyOrCollegeNameFromMode(context);
+      if(malList!=null && malList.length>0)
+      {
+        if(malList.first == 1)
+        {
+          companyName = malList.last;
+        }
+        else if(malList.first == 2)
+        {
+          collegeName = malList.last;
+        }
+        else
+        {
+          companyName = '';
+          collegeName = '';
+        }
+      }
       var snaps;
-      if(companyName.length>0)
+      if(companyName!= null && companyName.length>0)
         {
           snaps = await planRef
               .where('userIds', arrayContains: uid)
@@ -444,6 +509,15 @@ class PlanService {
               .limit(5)
               .get();
         }
+      else if(companyName!= null && collegeName.length>0)
+      {
+        snaps = await planRef
+            .where('userIds', arrayContains: uid)
+            .where('collegeName', isEqualTo: companyName)
+            .orderBy('recentMsg.${'time'}', descending: true)
+            .limit(5)
+            .get();
+      }
       else
         {
           snaps = await planRef
@@ -539,9 +613,27 @@ class PlanService {
   Future<List<Plan>> getPlansForUser(BuildContext context,String uid) async {
     List<Plan> userPlans = [];
     try {
-      String companyName = await getCompanyNameFromMode(context);
+      // String companyName = await getCompanyNameFromMode(context);
+      String companyName,collegeName;
+      List malList = getCompanyOrCollegeNameFromMode(context);
+      if(malList!=null && malList.length>0)
+      {
+        if(malList.first == 1)
+        {
+          companyName = malList.last;
+        }
+        else if(malList.first == 2)
+        {
+          collegeName = malList.last;
+        }
+        else
+        {
+          companyName = '';
+          collegeName = '';
+        }
+      }
       var snaps;
-      if(companyName.length>0)
+      if(companyName!= null && companyName.length>0)
         {
           JumpInUser currentUser = await locator.get<UserService>().getCurrentUser();
           snaps = await planRef
@@ -551,6 +643,16 @@ class PlanService {
               .limit(500)
               .get();
         }
+      else if(collegeName!= null && collegeName.length>0)
+      {
+        JumpInUser currentUser = await locator.get<UserService>().getCurrentUser();
+        snaps = await planRef
+            .where('userIds', arrayContains: uid)
+            .where('collegeName',isEqualTo: currentUser.placeOfEdu)
+            .orderBy('createdAt', descending: true)
+            .limit(500)
+            .get();
+      }
       else
         {
           snaps = await planRef
@@ -663,12 +765,38 @@ class PlanService {
       //     planRef.doc(plan.id).update({'chat_activity': chatActivity});
       //   });
       // });
-      String companyName = getCompanyNameFromMode(context);
+      // String companyName = getCompanyNameFromMode(context);
+      String companyName,collegeName;
+      List malList = getCompanyOrCollegeNameFromMode(context);
+      if(malList!=null && malList.length>0)
+      {
+        if(malList.first == 1)
+        {
+          companyName = malList.last;
+        }
+        else if(malList.first == 2)
+        {
+          collegeName = malList.last;
+        }
+        else
+        {
+          companyName = '';
+          collegeName = '';
+        }
+      }
       if(companyName.length>0)
       {
         return planRef
             .where('userIds', arrayContains: userId)
             .where('companyName',isEqualTo: companyName)
+            .orderBy('recentMsg.${'time'}', descending: true)
+            .snapshots();
+      }
+      else if(collegeName.length>0)
+      {
+        return planRef
+            .where('userIds', arrayContains: userId)
+            .where('collegeName',isEqualTo: collegeName)
             .orderBy('recentMsg.${'time'}', descending: true)
             .snapshots();
       }

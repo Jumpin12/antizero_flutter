@@ -58,6 +58,30 @@ class UserService
     }
   }
 
+  // update user as deactive if user exist in user collection
+  Future<void> updateDeactive(String id, int deactivate) async
+  {
+    var doc = await userServ.userRef.doc(id).get();
+    if(doc.exists)
+    {
+      Map<String, dynamic> map = doc.data();
+      if(map.containsKey('deactivate'))
+      {
+        // Replace field by the field you want to check.
+        await userServ.userRef.doc(id).update({'deactivate': deactivate});
+      }
+      else
+      {
+        JumpInUser user = await locator.get<UserService>().getUserById(id);
+        user.deactivate = deactivate;
+        await userRef.doc(id).set(user.toJson()).catchError((e) {
+          showToast('Error caught!');
+          return null;
+        });
+      }
+    }
+  }
+
   // update token in user collection
   Future<void> saveDeviceToken(String id, String fcmToken) async {
     if (fcmToken != null) {
@@ -319,15 +343,39 @@ class UserService
       print('userProvider.userState ${userProvider.userState}');
       print('userProvider.userCountry ${userProvider.userCountry}');
       if (userProvider.userState == null && userProvider.userCountry == null) {
-        if(userProvider.currentUser.placeOfWork!=null)
+        if(userProvider.currentUser.placeOfEdu!=null || userProvider.currentUser.placeOfWork!=null)
           {
-            String companyName = getCompanyNameFromMode(context);
-            if(companyName.length>0)
+            // String companyName = getCompanyNameFromMode(context);
+            String companyName,collegeName;
+            List malList = getCompanyOrCollegeNameFromMode(context);
+            if(malList!=null && malList.length>0)
+            {
+              if(malList.first == 1)
+              {
+                companyName = malList.last;
+              }
+              else if(malList.first == 2)
+              {
+                collegeName = malList.last;
+              }
+              else
+              {
+                companyName = '';
+                collegeName = '';
+              }
+            }
+            if(companyName!= null && companyName.length>0)
               {
                 userSnaps = await userRef
                     .where('placeOfWork',isEqualTo: userProvider.currentUser.placeOfWork).
                 orderBy('createdAt', descending: true).limit(500).get();
               }
+            else if(collegeName!= null && collegeName.length>0)
+            {
+              userSnaps = await userRef
+                  .where('placeOfEdu',isEqualTo: userProvider.currentUser.placeOfEdu).
+              orderBy('createdAt', descending: true).limit(500).get();
+            }
             else
               {
                 userSnaps = await userRef.
@@ -342,9 +390,27 @@ class UserService
       } else {
         if (locationType == LocationType.SearchWithinState &&
             userProvider.userState != null) {
-          if (userProvider.currentUser.placeOfWork != null)
+          if (userProvider.currentUser.placeOfWork != null || userProvider.currentUser.placeOfEdu !=null)
           {
-            String companyName = getCompanyNameFromMode(context);
+            // String companyName = getCompanyNameFromMode(context);
+            String companyName,collegeName;
+            List malList = getCompanyOrCollegeNameFromMode(context);
+            if(malList!=null && malList.length>0)
+            {
+              if(malList.first == 1)
+              {
+                companyName = malList.last;
+              }
+              else if(malList.first == 2)
+              {
+                collegeName = malList.last;
+              }
+              else
+              {
+                companyName = '';
+                collegeName = '';
+              }
+            }
             if (companyName.length > 0)
             {
               userSnaps = await userRef
@@ -355,6 +421,16 @@ class UserService
                 .orderBy('createdAt', descending: true)
                 .limit(limit)
                 .get();
+            }
+            else if (companyName.length > 0)
+            {
+              userSnaps = await userRef
+                  .where('location.state', isEqualTo: userProvider.userState)
+                  .where('location.country', isEqualTo: userProvider.userCountry)
+                  .where('placeOfEdu', isEqualTo: collegeName)
+                  .orderBy('createdAt', descending: true)
+                  .limit(limit)
+                  .get();
             }
             else
             {
@@ -376,9 +452,27 @@ class UserService
         }
         if (locationType == LocationType.SearchWithinCountry &&
             userProvider.userCountry != null) {
-          if(userProvider.currentUser.placeOfWork!=null)
+          if(userProvider.currentUser.placeOfWork!=null || userProvider.currentUser.placeOfEdu!=null)
             {
-              String companyName = getCompanyNameFromMode(context);
+              // String companyName = getCompanyNameFromMode(context);
+              String companyName,collegeName;
+              List malList = getCompanyOrCollegeNameFromMode(context);
+              if(malList!=null && malList.length>0)
+              {
+                if(malList.first == 1)
+                {
+                  companyName = malList.last;
+                }
+                else if(malList.first == 2)
+                {
+                  collegeName = malList.last;
+                }
+                else
+                {
+                  companyName = '';
+                  collegeName = '';
+                }
+              }
               if (companyName.length > 0)
               {
                 userSnaps = await userRef
@@ -386,6 +480,17 @@ class UserService
                     .where('location.state', isNotEqualTo: userProvider.userState)
                     .where('location.country', isEqualTo: userProvider.userCountry)
                     .where('placeOfWork',isEqualTo: companyName)
+                    .orderBy('createdAt', descending: true)
+                    .limit(limit)
+                    .get();
+              }
+              else if (collegeName.length > 0)
+              {
+                userSnaps = await userRef
+                    .orderBy('location.state')
+                    .where('location.state', isNotEqualTo: userProvider.userState)
+                    .where('location.country', isEqualTo: userProvider.userCountry)
+                    .where('placeOfEdu',isEqualTo: collegeName)
                     .orderBy('createdAt', descending: true)
                     .limit(limit)
                     .get();
@@ -412,10 +517,28 @@ class UserService
         }
         if (locationType == LocationType.SearchOutsideCountry &&
             userProvider.userCountry != null) {
-          if(userProvider.currentUser.placeOfWork!=null)
+          if(userProvider.currentUser.placeOfWork!=null || userProvider.currentUser.placeOfEdu!=null)
             {
-              String companyName = getCompanyNameFromMode(context);
-              if (companyName.length > 0)
+              // String companyName = getCompanyNameFromMode(context);
+              String companyName,collegeName;
+              List malList = getCompanyOrCollegeNameFromMode(context);
+              if(malList!=null && malList.length>0)
+              {
+                if(malList.first == 1)
+                {
+                  companyName = malList.last;
+                }
+                else if(malList.first == 2)
+                {
+                  collegeName = malList.last;
+                }
+                else
+                {
+                  companyName = '';
+                  collegeName = '';
+                }
+              }
+              if (companyName!= null && companyName.length > 0)
                 {
                   userSnaps = await userRef
                       .orderBy('location.country')
@@ -425,6 +548,16 @@ class UserService
                       .limit(limit)
                       .get();
                 }
+              else if (collegeName!= null && collegeName.length > 0)
+              {
+                userSnaps = await userRef
+                    .orderBy('location.country')
+                    .where('location.country', isNotEqualTo: userProvider.userCountry)
+                    .where('placeOfEdu',isEqualTo: userProvider.currentUser.placeOfEdu)
+                    .orderBy('createdAt', descending: true)
+                    .limit(limit)
+                    .get();
+              }
               else
                 {
                   userSnaps = await userRef
@@ -444,14 +577,41 @@ class UserService
                 .get();
         }
         if (locationType == LocationType.SearchAnywhere) {
-          if(userProvider.currentUser.placeOfWork!=null)
+          if(userProvider.currentUser.placeOfWork!=null || userProvider.currentUser.placeOfEdu!=null)
             {
-              String companyName = getCompanyNameFromMode(context);
-              if (companyName.length > 0)
+            //   String companyName = getCompanyNameFromMode(context);
+              String companyName,collegeName;
+              List malList = getCompanyOrCollegeNameFromMode(context);
+              if(malList!=null && malList.length>0)
+              {
+                if(malList.first == 1)
+                {
+                  companyName = malList.last;
+                }
+                else if(malList.first == 2)
+                {
+                  collegeName = malList.last;
+                }
+                else
+                {
+                  companyName = '';
+                  collegeName = '';
+                }
+              }
+              if (companyName!=null && companyName.length > 0)
               {
                 userSnaps = await userRef
                     .where('location', isNull: true)
                     .where('placeOfWork',isEqualTo: companyName)
+                    .orderBy('createdAt', descending: true)
+                    .limit(limit)
+                    .get();
+              }
+              else if (collegeName!=null && collegeName.length > 0)
+              {
+                userSnaps = await userRef
+                    .where('location', isNull: true)
+                    .where('placeOfEdu',isEqualTo: collegeName)
                     .orderBy('createdAt', descending: true)
                     .limit(limit)
                     .get();
@@ -514,8 +674,26 @@ class UserService
             userProvider.userState != null) {
           if(userProvider.currentUser.placeOfWork!=null)
             {
-              String companyName = getCompanyNameFromMode(context);
-              if(companyName.length>0)
+              // String companyName = getCompanyNameFromMode(context);
+              String companyName,collegeName;
+              List malList = getCompanyOrCollegeNameFromMode(context);
+              if(malList!=null && malList.length>0)
+              {
+                if(malList.first == 1)
+                {
+                  companyName = malList.last;
+                }
+                else if(malList.first == 2)
+                {
+                  collegeName = malList.last;
+                }
+                else
+                {
+                  companyName = '';
+                  collegeName = '';
+                }
+              }
+              if(companyName!=null && companyName.length>0)
                 {
                   userSnaps = await userRef
                       .where('location.state', isEqualTo: userProvider.userState)
@@ -526,6 +704,17 @@ class UserService
                       .limit(limit)
                       .get();
                 }
+              else if(collegeName!=null && collegeName.length>0)
+              {
+                userSnaps = await userRef
+                    .where('location.state', isEqualTo: userProvider.userState)
+                    .where('location.country', isEqualTo: userProvider.userCountry)
+                    .where('placeOfEdu',isEqualTo: collegeName)
+                    .orderBy('createdAt', descending: true)
+                    .startAfter([lastUser.createdAt.toIso8601String()])
+                    .limit(limit)
+                    .get();
+              }
               else
                 {
                   userSnaps = await userRef
@@ -548,16 +737,46 @@ class UserService
         }
         if (locationType == LocationType.SearchWithinCountry &&
             userProvider.userCountry != null) {
-          if(userProvider.currentUser.placeOfWork!=null)
+          if(userProvider.currentUser.placeOfWork!=null || userProvider.currentUser.placeOfEdu!=null)
             {
-              String companyName = getCompanyNameFromMode(context);
-              if(companyName.length>0)
+              // String companyName = getCompanyNameFromMode(context);
+              String companyName,collegeName;
+              List malList = getCompanyOrCollegeNameFromMode(context);
+              if(malList!=null && malList.length>0)
+              {
+                if(malList.first == 1)
+                {
+                  companyName = malList.last;
+                }
+                else if(malList.first == 2)
+                {
+                  collegeName = malList.last;
+                }
+                else
+                {
+                  companyName = '';
+                  collegeName = '';
+                }
+              }
+              if(companyName!=null && companyName.length>0)
               {
                 userSnaps = await userRef
                     .orderBy('location.state',descending: true)
                     .where('location.state', isNotEqualTo: userProvider.userState)
                     .where('location.country', isEqualTo: userProvider.userCountry)
                     .where('placeOfWork',isEqualTo: companyName)
+                    .orderBy('createdAt', descending: true)
+                    .startAfter([lastUser.createdAt.toIso8601String()])
+                    .limit(limit)
+                    .get();
+              }
+              else if(collegeName!=null && collegeName.length>0)
+              {
+                userSnaps = await userRef
+                    .orderBy('location.state',descending: true)
+                    .where('location.state', isNotEqualTo: userProvider.userState)
+                    .where('location.country', isEqualTo: userProvider.userCountry)
+                    .where('placeOfEdu',isEqualTo: collegeName)
                     .orderBy('createdAt', descending: true)
                     .startAfter([lastUser.createdAt.toIso8601String()])
                     .limit(limit)
@@ -587,10 +806,28 @@ class UserService
         }
         if (locationType == LocationType.SearchOutsideCountry &&
             userProvider.userCountry != null) {
-          if(userProvider.currentUser.placeOfWork!=null)
+          if(userProvider.currentUser.placeOfWork!=null || userProvider.currentUser.placeOfEdu!=null)
           {
-            String companyName = getCompanyNameFromMode(context);
-            if(companyName.length>0)
+            // String companyName = getCompanyNameFromMode(context);
+            String companyName,collegeName;
+            List malList = getCompanyOrCollegeNameFromMode(context);
+            if(malList!=null && malList.length>0)
+            {
+              if(malList.first == 1)
+              {
+                companyName = malList.last;
+              }
+              else if(malList.first == 2)
+              {
+                collegeName = malList.last;
+              }
+              else
+              {
+                companyName = '';
+                collegeName = '';
+              }
+            }
+            if(companyName!=null && companyName.length>0)
             {
               userSnaps = await userRef
                   .orderBy('location.country', descending: true)
@@ -598,6 +835,19 @@ class UserService
                   'location.country', isNotEqualTo: userProvider.userCountry)
                   .where(
                   'placeOfWork', isEqualTo: companyName)
+                  .orderBy('createdAt', descending: true)
+                  .startAfter([lastUser.createdAt.toIso8601String()])
+                  .limit(limit)
+                  .get();
+            }
+            else if(collegeName!=null && collegeName.length>0)
+            {
+              userSnaps = await userRef
+                  .orderBy('location.country', descending: true)
+                  .where(
+                  'location.country', isNotEqualTo: userProvider.userCountry)
+                  .where(
+                  'placeOfEdu', isEqualTo: companyName)
                   .orderBy('createdAt', descending: true)
                   .startAfter([lastUser.createdAt.toIso8601String()])
                   .limit(limit)
@@ -625,14 +875,42 @@ class UserService
                 .get();
         }
         if (locationType == LocationType.SearchAnywhere) {
-          if(userProvider.currentUser.placeOfWork!=null)
+          if(userProvider.currentUser.placeOfWork!=null || userProvider.currentUser.placeOfEdu!=null)
             {
-              String companyName = getCompanyNameFromMode(context);
-              if(companyName.length>0)
+              // String companyName = getCompanyNameFromMode(context);
+              String companyName,collegeName;
+              List malList = getCompanyOrCollegeNameFromMode(context);
+              if(malList!=null && malList.length>0)
+              {
+                if(malList.first == 1)
+                {
+                  companyName = malList.last;
+                }
+                else if(malList.first == 2)
+                {
+                  collegeName = malList.last;
+                }
+                else
+                {
+                  companyName = '';
+                  collegeName = '';
+                }
+              }
+              if(companyName!=null && companyName.length>0)
               {
                 userSnaps = await userRef
                     .where('location', isNull: true)
                     .where('placeOfWork',isEqualTo: companyName)
+                    .orderBy('createdAt', descending: true)
+                    .startAfter([lastUser.createdAt.toIso8601String()])
+                    .limit(limit)
+                    .get();
+              }
+              else if(collegeName!=null && collegeName.length>0)
+              {
+                userSnaps = await userRef
+                    .where('location', isNull: true)
+                    .where('placeOfEdu',isEqualTo: collegeName)
                     .orderBy('createdAt', descending: true)
                     .startAfter([lastUser.createdAt.toIso8601String()])
                     .limit(limit)

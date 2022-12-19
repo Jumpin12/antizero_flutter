@@ -37,6 +37,7 @@ class Plan {
   String companyName;
   Map<dynamic, dynamic> chatActivity;
   String placeOfWork;
+  String placeOfEdu;
 
   Plan(
       this.id,
@@ -63,7 +64,7 @@ class Plan {
       this.recentMsg,
       this.createdAt,
       this.searchPname,
-      this.chatActivity,this.companyName,this.placeOfWork);
+      this.chatActivity,this.companyName,this.placeOfWork,this.placeOfEdu);
 
   Plan.named(
       {this.id,
@@ -90,7 +91,7 @@ class Plan {
       this.recentMsg,
       this.createdAt,
       this.searchPname,
-      this.chatActivity,this.companyName,this.placeOfWork});
+      this.chatActivity,this.companyName,this.placeOfWork,this.placeOfEdu});
 
   Plan copyWith(
       {String id,
@@ -117,7 +118,7 @@ class Plan {
       List<Member> member,
       DateTime createdAt,
       String searchPname,
-      Map<dynamic, dynamic> chatActivity,bool isCompanyPlan,String companyName,String placeOfWork}) {
+      Map<dynamic, dynamic> chatActivity,bool isCompanyPlan,String companyName,String placeOfWork,String placeOfEdu}) {
     return Plan.named(
       id: id ?? this.id,
       host: host ?? this.host,
@@ -145,7 +146,8 @@ class Plan {
       searchPname: searchPname ?? this.searchPname,
       chatActivity: chatActivity ?? this.chatActivity,
       companyName: companyName ?? this.companyName,
-      placeOfWork: placeOfWork ?? this.placeOfWork
+      placeOfWork: placeOfWork ?? this.placeOfWork,
+      placeOfEdu: placeOfEdu ?? this.placeOfEdu
     );
   }
 
