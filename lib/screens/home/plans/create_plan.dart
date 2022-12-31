@@ -141,7 +141,8 @@ class _CreatePlanPageState extends State<CreatePlanPage> {
         setState(() {
           saving = true;
         });
-        print('Create plan $_selectedPlanCat $title $disc $startDate $time $totalSpots $companyName');
+        print('Create plan $_selectedPlanCat $title $disc $startDate '
+            '$time $totalSpots $companyName');
         currentPlan = currentPlan.copyWith(
             catName: _selectedPlanCat,
             planName: title,
@@ -250,7 +251,9 @@ class _CreatePlanPageState extends State<CreatePlanPage> {
               Plan newcurrentPlan = await locator.get<PlanService>().getPlanById(widget.editPlan.id);
               planProvider.currentPlan = newcurrentPlan;
               Navigator.pop(context);
-            } else {
+            }
+            else
+            {
               showError(context: context, errMsg: 'Error caught in editing plan!');
             }
           }
@@ -273,7 +276,8 @@ class _CreatePlanPageState extends State<CreatePlanPage> {
                 await Provider.of<PlanProvider>(context, listen: false)
                     .getHomePlan(context);
               });
-              Navigator.pop(context);
+              resetValues();
+              // Navigator.pop(context);
             } else {
               showError(context: context, errMsg: 'Error caught in saving plan!');
             }
@@ -309,6 +313,7 @@ class _CreatePlanPageState extends State<CreatePlanPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    print('totalSpots $totalSpots');
     return Container(
       decoration: const BoxDecoration(
         gradient: primaryGradient,
@@ -703,7 +708,7 @@ class _CreatePlanPageState extends State<CreatePlanPage> {
                               ? "Start Date"
                               : Jiffy(startDate).yMMMd,
                         ),
-                         if (multi == true || online == true)
+                         if (multi == true)
                           CustomTime(
                             onTap: () async {
                               final DateTime picked = await showDatePicker(
@@ -990,7 +995,7 @@ class _CreatePlanPageState extends State<CreatePlanPage> {
                   ),
                   FadeAnimation(
                     0.2,
-                    CustomFormField(
+                  CustomFormField(
                       prefix: SvgPicture.asset(
                         createClipboardIcon,
                         fit: BoxFit.scaleDown,
@@ -1210,6 +1215,30 @@ class _CreatePlanPageState extends State<CreatePlanPage> {
       }
       planMembers.addAll(users);
     }
+    setState(() {
+
+    });
+  }
+
+  void resetValues()
+  {
+    _selectedPlanCat = PlanCatName[0];
+    title = "";
+    disc = "";
+    planAdd = "";
+    totalSpots = "";
+    online = false;
+    multi = false;
+    startDate = null;
+    endDate = null;
+    time = null;
+    age = false;
+    ageLimit = "";
+    fees = false;
+    entryFee = "";
+    planAdd = "";
+    imgFiles.clear();
+    planMembers.clear();
     setState(() {
 
     });

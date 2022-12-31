@@ -95,6 +95,7 @@ class _PlansNewState extends State<PlansNew> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     var planProvider = Provider.of<PlanProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
+
     var size = MediaQuery.of(context).size;
     return planProvider.isFirstListLoading
         ? spinKit
@@ -121,8 +122,11 @@ class _PlansNewState extends State<PlansNew> with SingleTickerProviderStateMixin
             physics: BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: planProvider.planList.length,
-            itemBuilder: (BuildContext context, int index) {
-              final Plan plan = planProvider.planList[index];
+            itemBuilder: (BuildContext context, int index)
+            {
+              print('planProvider.planList.length ${planProvider.planList.length}');
+              print('planProvider.planList ${planProvider.planList[index]}');
+              Plan plan = planProvider.planList[index];
               int acceptedMemLength = getAcceptedMemberLength(plan.member);
               int totalSpot = int.parse(plan.spot);
               int spotRem = 0;
@@ -140,7 +144,8 @@ class _PlansNewState extends State<PlansNew> with SingleTickerProviderStateMixin
               Uint8List bytes;
               return WidgetToImage(builder: (key) {
                 keyK = key;
-                return HomePlanCardNew(
+                return
+                  HomePlanCardNew(
                   planmodel: plan,
                   catName: plan.catName,
                   centerImage: ImageCardNew(

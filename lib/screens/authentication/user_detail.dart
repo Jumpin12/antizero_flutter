@@ -65,8 +65,8 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
   final recordingPlayer = AssetsAudioPlayer();
   String pathToAudio;
   bool _playAudio = false;
-  // Company _selectedCompanyName;
-  // List<Company> malcompany;
+  Company _selectedCompanyName;
+  List<Company> malcompany;
 
   void initializer() async {
     if(Platform.isAndroid)
@@ -148,7 +148,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     nameController = new TextEditingController();
     currentAuthUser();
     initializer();
-    // getCompanyName();
+    getCompanyName();
     super.initState();
     FirebaseAnalytics.instance.logScreenView(
       screenName: 'User Details Screens',
@@ -156,9 +156,9 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     );
   }
 
-  // getCompanyName() async {
-  //   await setCompany(context);
-  // }
+  getCompanyName() async {
+    await setCompany(context);
+  }
 
   currentAuthUser() async {
     var user = await locator.get<AuthService>().currentUser();
@@ -505,47 +505,47 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                           },
                         ),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(top: 8.0,left: 15,
-                      //       right: 15),
-                      //   child: CustomDropDownCompany(
-                      //     label: 'Choose Company',
-                      //     hint: 'Select Company',
-                      //     borderColor: blue,
-                      //     list: Provider.of<CompanyProvider>(context, listen: false).companies
-                      //         .map((Company selected) {
-                      //       return DropdownMenuItem<Company>(
-                      //         child: Row(
-                      //           children: [
-                      //             Expanded(
-                      //               child: Text(
-                      //                 selected.companyName,
-                      //                 maxLines: 2,
-                      //                 softWrap: false,
-                      //                 style: bodyStyle(
-                      //                     context: context,
-                      //                     size: 12,
-                      //                     color: Colors.black),
-                      //                 overflow: TextOverflow.ellipsis,
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         ),
-                      //         value: selected,
-                      //       );
-                      //     }).toList(),
-                      //     onChanged: (Company newSelection) {
-                      //       TextEditingController uCodeController = TextEditingController();
-                      //       FocusNode _ucode = new FocusNode();
-                      //       showCompanyCodeDialog(context, _ucode, uCodeController,newSelection);
-                      //       setState(() {
-                      //         _selectedCompanyName = newSelection;
-                      //         currentUser.placeOfWork = _selectedCompanyName.companyName;
-                      //       });
-                      //     },
-                      //     selectedValue: _selectedCompanyName,
-                      //   ),
-                      // ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0,left: 15,
+                            right: 15),
+                        child: CustomDropDownCompany(
+                          label: 'Choose Company',
+                          hint: 'Select Company',
+                          borderColor: blue,
+                          list: Provider.of<CompanyProvider>(context, listen: false).companies
+                              .map((Company selected) {
+                            return DropdownMenuItem<Company>(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      selected.companyName,
+                                      maxLines: 2,
+                                      softWrap: false,
+                                      style: bodyStyle(
+                                          context: context,
+                                          size: 12,
+                                          color: Colors.black),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              value: selected,
+                            );
+                          }).toList(),
+                          onChanged: (Company newSelection) {
+                            TextEditingController uCodeController = TextEditingController();
+                            FocusNode _ucode = new FocusNode();
+                            showCompanyCodeDialog(context, _ucode, uCodeController,newSelection);
+                            setState(() {
+                              _selectedCompanyName = newSelection;
+                              currentUser.placeOfWork = _selectedCompanyName.companyName;
+                            });
+                          },
+                          selectedValue: _selectedCompanyName,
+                        ),
+                      ),
                       Container(
                         margin: EdgeInsets.symmetric(
                             horizontal: getScreenSize(context).width * 0.08,

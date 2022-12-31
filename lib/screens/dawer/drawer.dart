@@ -98,9 +98,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
             name: userProvider.currentUser.name,
             mode: userProvider.currentUser.mode,
             onTap: () {
-              navigationModel.changePage = 2;
-              Navigator.of(context).push(PageTransition(
-                  child: DashBoardScreen(), type: PageTransitionType.fade));
+              // navigationModel.changePage = 2;
+              // Navigator.of(context).push(PageTransition(
+              //     child: DashBoardScreen(), type: PageTransitionType.fade));
             },
           ),
           // location

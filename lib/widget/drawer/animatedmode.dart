@@ -40,7 +40,8 @@ class _AnimatedModeState extends State<AnimatedMode> {
       child: Stack(
         children: <Widget>[
           GestureDetector(
-            onTap: () {
+            onTap: ()
+            {
               initialPosition = !initialPosition;
               var index = 0;
               if (!initialPosition) {

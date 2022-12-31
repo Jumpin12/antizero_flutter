@@ -9,11 +9,13 @@ part of 'college.dart';
 College _$CollegeFromJson(Map<String, dynamic> json) {
   return College(
     collegeName: json['collegeName'] as String,
-    id: json['id'] as String
+    id: json['id'] as String,
+    passCode: json['passCode'] as String,
   );
 }
 
 Map<String, dynamic> _$CollegeToJson(College instance) => <String, dynamic>{
   'collegeName': instance.collegeName,
-  'id': instance.id
+  'id': instance.id,
+  'passCode': instance.passCode,
 };

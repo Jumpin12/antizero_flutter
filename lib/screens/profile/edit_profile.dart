@@ -183,7 +183,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _submit = FocusNode();
     initializer();
     getCompanyName();
-    // getCollegeName();
+    getCollegeName();
     super.initState();
   }
 
@@ -609,57 +609,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       height: 20,
                     ),
                     // place of education
-                    CustomFormField(
-                      label: 'Place of Education',
-                      focus: _edu,
-                      hint: 'Enter your place of education',
-                      initValue: userProvider.currentUser.placeOfEdu,
-                      inputType: TextInputType.text,
-                      validatorFn: eduValidator,
-                      onChanged: (String val)
-                      {
-                        _currentUser.placeOfEdu = val;
-                      },
-                      onFiledSubmitted: (String value) {
-                        _edu.unfocus();
-                        FocusScope.of(context).requestFocus(_academic);
-                      },
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 8.0),
-                    //   child: CustomDropDownCollege(
-                    //     label: 'Place of Education',
-                    //     hint: 'Enter your place of education',
-                    //     borderColor: blue,
-                    //     list: Provider.of<CollegeProvider>(context, listen: false).college
-                    //         .map((College selected) {
-                    //       return DropdownMenuItem<College>(
-                    //         child: Row(
-                    //           children: [
-                    //             Expanded(
-                    //               child: Text(
-                    //                 selected.collegeName,
-                    //                 maxLines: 2,
-                    //                 softWrap: false,
-                    //                 style: bodyStyle(
-                    //                     context: context,
-                    //                     size: 12,
-                    //                     color: Colors.black),
-                    //                 overflow: TextOverflow.ellipsis,
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //         value: selected,
-                    //       );
-                    //     }).toList(),
-                    //     onChanged: (College newSelection)
-                    //     {
-                    //
-                    //     },
-                    //     selectedValue: _selectedCollegeName,
-                    //   ),
+                    // CustomFormField(
+                    //   label: 'Place of Education',
+                    //   focus: _edu,
+                    //   hint: 'Enter your place of education',
+                    //   initValue: userProvider.currentUser.placeOfEdu,
+                    //   inputType: TextInputType.text,
+                    //   validatorFn: eduValidator,
+                    //   onChanged: (String val)
+                    //   {
+                    //     _currentUser.placeOfEdu = val;
+                    //   },
+                    //   onFiledSubmitted: (String value) {
+                    //     _edu.unfocus();
+                    //     FocusScope.of(context).requestFocus(_academic);
+                    //   },
                     // ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: CustomDropDownCollege(
+                        label: 'Place of Education',
+                        hint: 'Enter your place of education',
+                        borderColor: blue,
+                        list: Provider.of<CollegeProvider>(context, listen: false).college
+                            .map((College selected) {
+                          return DropdownMenuItem<College>(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    selected.collegeName,
+                                    maxLines: 2,
+                                    softWrap: false,
+                                    style: bodyStyle(
+                                        context: context,
+                                        size: 12,
+                                        color: Colors.black),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            value: selected,
+                          );
+                        }).toList(),
+                        onChanged: (College newSelection)
+                        {
+                          TextEditingController uCodeController = TextEditingController();
+                          FocusNode _ucode = new FocusNode();
+                          showCollegeCodeDialog(context, _ucode, uCodeController,newSelection);
+                        },
+                        selectedValue: _selectedCollegeName,
+                      ),
+                    ),
                     // academic course
                     SizedBox(
                       height: 20,
@@ -834,6 +836,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                       itemBuilder: (BuildContext context, int index) =>
                           InterestBlock(
+                            selections: selections,
                             favourite:
                             !expanded ? favData[index] : expandedFavData[index],
                             onTap: () {
@@ -855,7 +858,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     value,
                                   });
                                 }
-                                print('Selections : $selections');
                               });
                             },
                           ),
@@ -1002,6 +1004,86 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             else
                             {
                               showToast('Please enter company passcode!');
+                            }
+                          },
+                          child: Text(
+                            'Check',
+                            style: GoogleFonts.nunitoSans(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  showCollegeCodeDialog(BuildContext context,FocusNode _uname,TextEditingController uCodeController,
+      College newSelection) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Material(
+          type: MaterialType.transparency,
+          child: Center(
+            child: Container(
+              height: 30.h,
+              width: 80.w,
+              padding: EdgeInsets.all(5.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(3.w),
+                color: Colors.white,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomFormField(
+                    label: 'Enter pass code for this College',
+                    focus: _uname,
+                    hint: 'Enter your code',
+                    controller: uCodeController,
+                    inputType: TextInputType.name,
+                    validatorFn: null,
+                    onChanged: (String val) {},
+                    onFiledSubmitted: (String value) {
+                      _uname.unfocus();
+                    },
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async
+                          {
+                            if((uCodeController.text.length>0))
+                            {
+                              if(newSelection.passCode == uCodeController.text.toString())
+                              {
+                                _currentUser.placeOfEdu = newSelection.collegeName;
+                                setState(()
+                                {
+                                  _selectedCollegeName = newSelection;
+                                  _currentUser.placeOfEdu = _selectedCollegeName.collegeName;
+                                });
+                                showToast('College changed');
+                                Navigator.pop(context);
+                              }
+                              else
+                              {
+                                showToast('Please enter right college passcode!');
+                              }
+                            }
+                            else
+                            {
+                              showToast('Please enter college passcode!');
                             }
                           },
                           child: Text(

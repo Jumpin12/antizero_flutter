@@ -162,9 +162,10 @@ class PlanService {
       print('currentUser.placeOfWork ${currentUser.placeOfWork}');
       if(currentUser.placeOfWork!=null || currentUser.placeOfEdu!=null)
         {
-          //String companyName = await getCompanyNameFromMode(context);
+          // String companyName = await getCompanyNameFromMode(context);
           String companyName,collegeName;
           List malList = getCompanyOrCollegeNameFromMode(context);
+          print('malList ${malList}');
           if(malList!=null && malList.length>0)
           {
             if(malList.first == 1)
@@ -177,26 +178,35 @@ class PlanService {
             }
             else
             {
-              companyName = '';
-              collegeName = '';
+              companyName = "";
+              collegeName = "";
             }
           }
+          print('companyName $companyName');
           if(companyName.length>0)
             snap = await planRef.where('companyName',isEqualTo: currentUser.placeOfWork)
-              .orderBy('createdAt', descending: true)
-              .limit(5).get();
+                .orderBy('recentMsg.${'time'}', descending: true)
+              .limit(50).get();
           else if(collegeName.length>0)
             snap = await planRef.where('collegeName',isEqualTo: currentUser.placeOfEdu)
-                .orderBy('createdAt', descending: true)
-                .limit(5).get();
+                .orderBy('recentMsg.${'time'}', descending: true)
+                .limit(50).get();
           else
-            snap = await planRef.orderBy('createdAt', descending: true)
-                .limit(5).get();
+            {
+              print('companyName nothing');
+              snap = await planRef
+                  .where('public',isEqualTo: true)
+                  .orderBy('createdAt', descending: true)
+                  .limit(50).get();
+              print('companyName nothing ${snap}');
+            }
         }
       else
         {
-          snap = await planRef.orderBy('createdAt', descending: true)
-              .limit(5).get();
+          snap = await planRef.
+              where('public',isEqualTo: true)
+              .orderBy('createdAt', descending: true)
+              .limit(50).get();
         }
       // snap = await planRef.orderBy('createdAt', descending: true)
       //     .limit(5).get();
@@ -218,6 +228,7 @@ class PlanService {
 
   // get next public plan
   Future<List<Plan>> getNextPlan(BuildContext context,{String date, int limit}) async {
+    print('getNextPlan');
     List<Plan> publicPlans = [];
     try {
       JumpInUser currentUser = await locator.get<UserService>().getCurrentUser();
@@ -226,7 +237,7 @@ class PlanService {
         {
           // String companyName = await getCompanyNameFromMode(context);
           String companyName,collegeName;
-          List malList = getCompanyOrCollegeNameFromMode(context);
+          List malList =  getCompanyOrCollegeNameFromMode(context);
           if(malList!=null && malList.length>0)
           {
             if(malList.first == 1)
@@ -477,7 +488,7 @@ class PlanService {
 
   // fetch plan for user where status is accepted
   Future<List<Plan>> getAcceptedPlanForUser(BuildContext context,String uid) async {
-    print('userProvider.currentUser.id ${uid}');
+    print('getAcceptedPlanForUser ${uid}');
     List<Plan> acceptedPlans = [];
     try {
       // String companyName = await getCompanyNameFromMode(context);
@@ -611,6 +622,7 @@ class PlanService {
 
   // fetch all plan for user
   Future<List<Plan>> getPlansForUser(BuildContext context,String uid) async {
+    print('getPlansForUser');
     List<Plan> userPlans = [];
     try {
       // String companyName = await getCompanyNameFromMode(context);
@@ -750,7 +762,8 @@ class PlanService {
   }
 
   ///Function to fetch User Chat Stream
-  Stream<QuerySnapshot> fetchUserPlansChatStream(BuildContext context,String userId){
+  Stream<QuerySnapshot<Object>> fetchUserPlansChatStream(BuildContext context,String userId) {
+    print('fetchUserPlansChatStream');
     try {
       // planRef.get().then((querySnap) {
       //   querySnap.docs.forEach((doc) {

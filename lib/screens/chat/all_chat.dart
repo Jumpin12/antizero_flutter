@@ -45,21 +45,21 @@ class _AllChatPageState extends State<AllChatPage>
     searchController = TextEditingController();
     malList = getCompanyOrCollegeNameFromMode(context);
     if(malList!=null && malList.length>0)
+    {
+      if(malList.first == 1)
       {
-        if(malList.first == 1)
-          {
-            companyName = malList.last;
-          }
-        else if(malList.first == 2)
-          {
-            collegeName = malList.last;
-          }
-        else
-          {
-            companyName = '';
-            collegeName = '';
-          }
+        companyName = malList.last;
       }
+      else if(malList.first == 2)
+      {
+        collegeName = malList.last;
+      }
+      else
+      {
+        companyName = '';
+        collegeName = '';
+      }
+    }
     FirebaseAnalytics.instance.logScreenView(
       screenName: 'All Chats',
       screenClass: 'Chats',

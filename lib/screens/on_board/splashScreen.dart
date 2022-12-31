@@ -19,7 +19,9 @@ import 'package:sizer/sizer.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = '/splash';
-  const SplashScreen({Key key}) : super(key: key);
+  final bool isFromHeader;
+
+  const SplashScreen({Key key,this.isFromHeader=false}) : super(key: key);
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -51,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //         barrierDismissible: false,
     //       )
     //     : navigateToRoute(context);
-    navigateToRoute(context);
+    navigateToRoute(context,widget.isFromHeader);
   }
 
   @override

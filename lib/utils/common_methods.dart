@@ -4,6 +4,7 @@ import 'package:antizero_jumpin/provider/ModeModel.dart';
 import 'package:antizero_jumpin/provider/filter.dart';
 import 'package:antizero_jumpin/provider/user.dart';
 import 'package:antizero_jumpin/services/user.dart';
+import 'package:antizero_jumpin/utils/locator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
@@ -26,12 +27,14 @@ List getCompanyOrCollegeNameFromMode(BuildContext context)
   print('getCompanyNameFromMode');
   var userProvider = Provider.of<UserProvider>(context, listen: false);
   int mode = Provider.of<ModeProvider>(context, listen: false).getCurrentMode;
+  print('mode ${mode}');
   JumpInUser currentUser = userProvider.currentUser;
   String companyName = '';
+  print('currentUser.mode ${currentUser.mode}');
   if(currentUser.mode==0)
   {
     // 0 for no mode and ' ' is companyName
-    return [0,''];
+    return [0,""];
   }
   else
   {
@@ -46,7 +49,7 @@ List getCompanyOrCollegeNameFromMode(BuildContext context)
       // 2 for college and ' ' is companyName
       return [2,collegeName];
     else
-      return [0,''];
+      return [0,""];
   }
 }
 

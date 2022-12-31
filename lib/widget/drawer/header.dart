@@ -115,7 +115,7 @@ class _CustomDrawerHeaderState extends State<CustomDrawerHeader>
                           print('value $value');
                         });
                         Navigator.of(context).push(PageTransition(
-                            child: SplashScreen(),
+                            child: SplashScreen(isFromHeader:true),
                             type: PageTransitionType.fade));
                       },
                       buttonColor: Colors.blueAccent,

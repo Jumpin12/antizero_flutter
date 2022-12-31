@@ -6,6 +6,7 @@ import 'package:antizero_jumpin/main.dart';
 import 'package:antizero_jumpin/models/jumpin_user.dart';
 import 'package:antizero_jumpin/provider/ModeModel.dart';
 import 'package:antizero_jumpin/provider/auth.dart';
+import 'package:antizero_jumpin/provider/navigator.dart';
 import 'package:antizero_jumpin/provider/user.dart';
 import 'package:antizero_jumpin/screens/authentication/googleAuthScreen.dart';
 import 'package:antizero_jumpin/screens/authentication/interest.dart';
@@ -119,16 +120,47 @@ uploadCategory(String cat) async {
 //   return url;
 // }
 
+directLogin(BuildContext context) async
+{
+  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+  UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+  String token = await authProvider.signInWithGoogle();
+  if (token != null)
+  {
+    JumpInUser user = await userServ.getCurrentUser();
+    print('useruser $user');
+    var authUser = await authServ.currentUser();
+    if (user != null) {
+      userProvider.currentUser = user;
+      Navigator.of(context).push(PageTransition(child: DashBoardScreen(),
+          type: PageTransitionType.fade));
+    } else
+    {
+      /// user will be able to login - mobile number, if user login with google then directly login and goto interest page not phonenumber
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => InterestPage()),
+      );
+    }
+  } else {
+    showToast('Error Signing in!');
+  }
+}
+
 doGoogleLogin(BuildContext context) async {
   AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
   UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
   String token = await authProvider.signInWithGoogle();
   if (token != null) {
     JumpInUser user = await userServ.getCurrentUser();
+    print('useruser $user');
     var authUser = await authServ.currentUser();
     if (user != null) {
       userProvider.currentUser = user;
-    } else {
+      Navigator.of(context).push(PageTransition(child: DashBoardScreen(),
+          type: PageTransitionType.fade));
+    } else
+    {
       /// user will be able to login - mobile number, if user login with google then directly login and goto interest page not phonenumber
       Navigator.push(
         context,
@@ -254,31 +286,45 @@ setUser(BuildContext context, File imgFile, JumpInUser currentUser) async {
 }
 
 // navigateToRoute
-navigateToRoute(BuildContext context) async
+navigateToRoute(BuildContext context,bool isFromHeader) async
 {
   var userProvider = Provider.of<UserProvider>(context, listen: false);
   JumpInUser user = await userServ.getCurrentUser();
+  print('navigateToRoute user ${user}');
   if (user != null)
   {
-    print(' user.id ${user.id}');
-     await userServ.updateDeactive(user.id, 1);
-     if((user.deactivate != null) && (user.deactivate == 1))
-      {
-        // showToast('User is deleted.Please create a new account!');
-        Timer(Duration(seconds: 6), ()
-        {
-          Navigator.pushNamed(context, GoogleSignInScreen.routeName);
-        });
-      }
-    else
+    if(isFromHeader==true)
       {
         userProvider.currentUser = user;
-        print("user id is ${user.id}");
+        print("isFromHeader id ${user.id}");
         Timer(Duration(seconds: 6), ()
         {
           Navigator.of(context).push(PageTransition(child: DashBoardScreen(),
               type: PageTransitionType.fade));
         });
+      }
+    else
+      {
+        print(' user.id ${user.id}');
+        await userServ.updateDeactive(user.id, 1);
+        if((user.deactivate != null) && (user.deactivate == 1))
+        {
+          // showToast('User is deleted.Please create a new account!');
+          Timer(Duration(seconds: 6), ()
+          {
+            Navigator.pushNamed(context, GoogleSignInScreen.routeName);
+          });
+        }
+        else
+        {
+          userProvider.currentUser = user;
+          print("user id is ${user.id}");
+          Timer(Duration(seconds: 6), ()
+          {
+            Navigator.of(context).push(PageTransition(child: DashBoardScreen(),
+                type: PageTransitionType.fade));
+          });
+        }
       }
   }
   else

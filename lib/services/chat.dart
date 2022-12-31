@@ -593,8 +593,7 @@ class ChatService {
   }
 
   ///Function to fetch User Chat Stream
-  Stream<QuerySnapshot> fetchUserChatStream(BuildContext context,String userId)
-  {
+  Stream<QuerySnapshot<Object>> fetchUserChatStream(BuildContext context,String userId) {
     // String companyName = getCompanyNameFromMode(context);
     String companyName,collegeName;
     List malList = getCompanyOrCollegeNameFromMode(context);
@@ -641,7 +640,7 @@ class ChatService {
         {
           print(e.toString());
           return Stream.empty();
-        } 
+        }
       }
   }
 }
